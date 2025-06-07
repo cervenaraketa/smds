@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICODE - SOFTWARE GENERATOR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style_web.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="nav-links">
+                <a href="#" data-section="0">Home</a>
+                <a href="#" data-section="1">License</a>
+                <a href="mads.html">Aicode</a>
+                <a href="#">API</a>
+                <a href="#">Business</a>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="sign-in">Sign In</a>
+                <a href="#" class="start-free">Start For Free</a>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <section class="hero-section">
+                <div class="hero-text">
+                    <h1>AICODE</h1>
+                    <p>Software generator</p>
+                    <p class="subtitle">Start composing now — it's free</p>
+                    <div class="genre-tags">
+                        <div class="genre-tag">HTML</div>
+                        <div class="genre-tag">CSS</div>
+                        <div class="genre-tag">JAVASCRIPT</div>
+                        <div class="genre-tag">OPENROUTER.AI</div>
+
+                    </div>
+                </div>
+                <div class="ai-figure">
+                    AI MUSIC GENERATOR
+                </div>
+            </section>
+            
+            <section class="features-section">
+                <h2>FEATURES</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Instant Generation</h3>
+                        <p>Create complete software in seconds with our advanced AI algorithms</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Royalty-Free</h3>
+                        <p>All software is 100% royalty-free for personal and commercial use</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Customization</h3>
+                        <p>Fine-tune every aspect of your track to match your vision</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Multi-Genre</h3>
+                        <p>Generate any software</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Stem Export</h3>
+                        <p>Download individual tracks for further mixing and mastering</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>API Access</h3>
+                        <p>Integrate our music generation into your apps and workflows</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="pricing-section">
+                <h2>PRICING</h2>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <h3>Free</h3>
+                        <div class="price">$0</div>
+                        <ul>
+                            <li>10 tracks/month</li>
+                            <li>Basic genres</li>
+                            <li>MP3 download</li>
+                            <li>Personal use only</li>
+                        </ul>
+                        <button>Get Started</button>
+                    </div>
+                    <div class="pricing-card">
+                        <h3>Pro</h3>
+                        <div class="price">$15</div>
+                        <ul>
+                            <li>100 tracks/month</li>
+                            <li>All genres</li>
+                            <li>WAV download</li>
+                            <li>Commercial use</li>
+                        </ul>
+                        <button>Upgrade Now</button>
+                    </div>
+                    <div class="pricing-card">
+                        <h3>Enterprise</h3>
+                        <div class="price">$50</div>
+                        <ul>
+                            <li>Unlimited tracks</li>
+                            <li>All genres + custom</li>
+                            <li>Stem downloads</li>
+                            <li>API access</li>
+                        </ul>
+                        <button>Contact Sales</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+            const sections = document.querySelectorAll('section');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Navigation click handlers
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionIndex = parseInt(this.getAttribute('data-section'));
+                    if (sectionIndex >= 0 && sectionIndex < sections.length) {
+                        sections[sectionIndex].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                            inline: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Horizontal scroll behavior
+            let isScrolling = false;
+            mainContent.addEventListener('scroll', function() {
+                isScrolling = true;
+            });
+            
+            // Update active nav link based on scroll position
+            function updateActiveNav() {
+                if (isScrolling) return;
+                
+                const scrollPosition = mainContent.scrollLeft;
+                const windowWidth = window.innerWidth;
+                
+                sections.forEach((section, index) => {
+                    const sectionLeft = section.offsetLeft;
+                    const sectionRight = sectionLeft + section.offsetWidth;
+                    
+                    if (scrollPosition >= sectionLeft - windowWidth * 0.5 && 
+                        scrollPosition < sectionRight - windowWidth * 0.5) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (parseInt(link.getAttribute('data-section')) === index) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Throttle scroll events
+            setInterval(() => {
+                if (isScrolling) {
+                    updateActiveNav();
+                    isScrolling = false;
+                }
+            }, 100);
+            
+            // Initial active nav setup
+            updateActiveNav();
+        });
+    </script>
+</body>
+</html>
+
+
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

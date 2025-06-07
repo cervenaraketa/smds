@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Code Generation Studio – Pokročilé vývojové prostředí pro AI-asistované programování" />
+  <title>S.M.D.S | Pokročilé AI generování kódu</title>
+
+  <!-- Fonty a ikony -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Přejít na hlavní obsah</a>
+
+  <div class="app-container">
+    <!-- HORNÍ NAVIGACE -->
+    <header class="top-nav">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#111111" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M2 17L12 22L22 17" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M2 12L12 17L22 12" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="logo-gradient" x1="2" y1="12" x2="22" y2="12" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00FFCC" />
+                <stop offset="0.5" stop-color="#9D4EDD" />
+                <stop offset="1" stop-color="#FF36AB" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+                <h1>S.M.D.S<span class="blink">_</span></h1>
+        <h2 class="workspace-title"><span class="version-tag">1.0.0-beta.1</span></h2>
+    
+      </div>
+
+      <!-- SELEKTORY MODELŮ A PROMPTŮ -->
+      <div class="topbar-selectors">
+        <!-- Selektor modelu -->
+        <div class="model-selector">
+          <div class="model-display">
+            <div class="model-status"><span class="status-indicator active"></span></div>
+            <span class="model-name" id="currentModelName">deepseek-chat-v3-0324</span>
+            <button class="model-dropdown-btn" aria-label="Vybrat AI model">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="model-dropdown" id="modelDropdown">
+            <!-- Modely se načtou dynamicky -->
+          </div>
+        </div>
+
+        <!-- Selektor promptu -->
+        <div class="prompt-selector">
+          <div class="prompt-display">
+            <span class="prompt-name" id="promptNameDisplay">Výchozí prompt</span>
+            <button class="prompt-dropdown-btn" id="promptDropdownBtn" aria-label="Vybrat systémový prompt">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="prompt-dropdown" id="promptDropdown">
+            <!-- Prompty se načtou dynamicky -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Uživatelské ovládání -->
+      <div class="user-controls">
+        <button class="settings-btn" id="settingsBtn" aria-label="Nastavení">
+          <i class="fas fa-cog"></i>
+        </button>
+        <div class="user-avatar">
+          <img src="https://ui-avatars.com/api/?name=Dev+User&background=d47020&color=ffffff" alt="Avatar uživatele" />
+        </div>
+      </div>
+    </header>
+
+    <!-- POSTRANNÍ PANEL -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-icons">
+        <button class="sidebar-icon active" aria-label="Editor kódu" title="Editor kódu">
+          <i class="fas fa-code"></i>
+        </button>
+        <button class="sidebar-icon" id="promptManagerBtn" aria-label="Správa promptů" title="Správa promptů">
+          <i class="fas fa-file-alt"></i>
+        </button>
+        <button class="sidebar-icon" id="historyBtn" aria-label="Historie" title="Historie">
+          <i class="fas fa-history"></i>
+        </button>
+        <button class="sidebar-icon" id="downloadBtn" aria-label="Stáhnout projekt" title="Stáhnout projekt">
+          <i class="fas fa-download"></i>
+        </button>
+      </div>
+      
+      <div class="sidebar-bottom">
+        <div class="sidebar-balance">
+          <div class="credit-circle">
+            <div class="credit-inner">
+              <div class="credit-amount" id="creditAmount">--.--</div>
+              <div class="credit-unit"></div>
+            </div>
+          </div>
+          <div class="credit-footer">
+            <a href="https://openrouter.ai" target="_blank" rel="noopener">openrouter.ai</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Resizer -->
+    <div id="dragbar" class="dragbar" aria-hidden="true"></div>
+
+    <!-- HLAVNÍ OBSAH -->
+    <main id="main-content" class="main-content">
+      <div class="editor-container">
+        <!-- PANEL PROMPTU (VLEVO) -->
+        <div class="prompt-left">
+          <div class="prompt-input-container">
+            <textarea id="aiPrompt" class="prompt-input" placeholder="Popište co chcete vytvořit... (např. 'Vytvořte responzivní landing page pro technologickou firmu...')"></textarea>
+          </div>
+          <div class="prompt-buttons">
+            <button id="resetBtn" class="prompt-btn reset-btn" aria-label="Reset">
+              <i class="fas fa-trash-alt"></i><span>Reset</span>
+            </button>
+            <button id="continueBtn" class="prompt-btn continue-btn" style="display:none;" aria-label="Pokračovat v generování">
+              <i class="fas fa-ellipsis-h"></i><span>Pokračovat</span>
+            </button>
+            <button id="sendBtn" class="prompt-btn send-btn" aria-label="Odeslat prompt">
+              <i class="fas fa-paper-plane"></i><span>Generovat</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL KÓDU (VPRAVO) -->
+        <div class="code-panel">
+          <div class="editor-tabs">
+            <button class="filename active" data-model="index">index.html</button>
+            <button class="filename" data-model="thing" style="display:none;">thinking.txt</button>
+          </div>
+
+          <div id="editor" class="code-editor"></div>
+
+          <div class="editor-status-bar">
+            <div class="editor-status-left">
+              <span class="editor-status-item">HTML</span>
+              <span class="editor-status-item">UTF-8</span>
+            </div>
+            <div class="editor-status-right">
+              <button id="toggleAutoUpdateBtn" class="editor-status-btn active" title="Přepnout automatické aktualizace">
+                <i class="fas fa-sync-alt"></i><span>Auto Update</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resizer mezi editorem a náhledem -->
+      <div id="resizeBar" class="resize-bar" aria-hidden="true"></div>
+
+      <!-- NÁHLED -->
+      <div class="preview-container">
+        <div class="preview-header">
+          <h3>Render</h3>
+          <div class="preview-controls">
+            <button class="preview-control-btn" id="refreshPreviewBtn" aria-label="Obnovit náhled">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="preview-control-btn" id="openNewWindowBtn" aria-label="Otevřít v novém okně">
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            <button class="preview-control-btn" id="fullscreenBtn" aria-label="Celá obrazovka">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+        </div>
+        <div class="preview-frame-wrapper">
+          <svg class="snake-border-svg" preserveAspectRatio="none">
+            <rect x="1" y="1" />
+            <rect x="1" y="1" />
+          </svg>
+          <iframe id="renderFrame" class="preview-frame" title="Náhled kódu" sandbox="allow-scripts allow-same-origin"></iframe>
+          <div class="preview-loading">
+            <div class="preview-loading-spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOOGLE ADS PANEL -->
+      <div class="ads-container">
+        <div class="ads-header">
+          <span>Reklama</span>
+        </div>
+        <div class="ads-content">
+          <!-- Google AdSense blok -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODÁLNÍ OKNA -->
+  
+  <!-- Nastavení -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nastavení</h2>
+        <button class="modal-close" aria-label="Zavřít">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-section">
+          <h3>OpenRouter API</h3>
+          <div class="form-group">
+            <label for="apiKeyInput">API klíč:</label>
+            <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." />
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Parametry modelu</h3>
+          <div class="form-group">
+            <label for="temperatureInput">Teplota (0.0 - 2.0):</label>
+            <input type="range" id="temperatureInput" min="0" max="2" step="0.1" value="0.7" />
+            <span id="temperatureValue">0.7</span>
+          </div>
+          <div class="form-group">
+            <label for="maxTokensInput">Max tokeny:</label>
+            <input type="number" id="maxTokensInput" min="100" max="100000" value="4000" />
+          </div>
+          <div class="form-group">
+            <label for="topPInput">Top P (0.0 - 1.0):</label>
+            <input type="range" id="topPInput" min="0" max="1" step="0.05" value="0.9" />
+            <span id="topPValue">0.9</span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Vlastní modely</h3>
+          <div class="form-group">
+            <label for="customModelInput">Přidat model (např. openai/gpt-4):</label>
+            <div class="input-group">
+              <input type="text" id="customModelInput" placeholder="provider/model-name" />
+              <button id="addModelBtn" class="btn-secondary">Přidat</button>
+            </div>
+          </div>
+          <div id="customModelsList" class="custom-models-list"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveSettingsBtn" class="btn-primary">Uložit nastavení</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Správa promptů -->
+  <div id="promptManagerModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Správa promptů</h2>
+        <button class="modal-close" aria-label="Zavřít">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="prompt-manager-toolbar">
+          <button id="newPromptBtn" class="btn-primary">
+            <i class="fas fa-plus"></i> Nový prompt
+          </button>
+          <button id="importPromptBtn" class="btn-secondary">
+            <i class="fas fa-upload"></i> Importovat
+          </button>
+          <input type="file" id="importPromptFile" accept=".json" style="display: none;" />
+        </div>
+        
+        <div class="prompt-list" id="promptList">
+          <!-- Prompty se načtou dynamicky -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editor promptu -->
+  <div id="promptEditorModal" class="modal">
+    <div class="modal-content large">
+      <div class="modal-header">
+        <h2 id="promptEditorTitle">Editovat prompt</h2>
+        <button class="modal-close" aria-label="Zavřít">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="promptNameInput">Název promptu:</label>
+          <input type="text" id="promptNameInput" placeholder="Název promptu" />
+        </div>
+        
+        <div class="form-group">
+          <label for="promptDescriptionInput">Popis:</label>
+          <input type="text" id="promptDescriptionInput" placeholder="Krátký popis promptu" />
+        </div>
+        
+        <div class="form-group">
+          <label for="promptOutputTypeInput">Typ výstupu:</label>
+          <select id="promptOutputTypeInput">
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="js">JavaScript</option>
+            <option value="mixed">Smíšený (HTML+CSS+JS)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="promptContentInput">Obsah promptu:</label>
+          <textarea id="promptContentInput" rows="15" placeholder="Zde napište systémový prompt..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="exportPromptBtn" class="btn-secondary">
+          <i class="fas fa-download"></i> Exportovat
+        </button>
+        <button id="savePromptBtn" class="btn-primary">Uložit prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifikace -->
+  <div class="notifications-container" id="notificationsContainer"></div>
+
+  <!-- Monaco Editor -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.46.0/min/vs/loader.min.js"></script>
+  <script src="script.js" defer></script>
+  
+  <!-- Google AdSense inicializace -->
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</body>
+</html>
